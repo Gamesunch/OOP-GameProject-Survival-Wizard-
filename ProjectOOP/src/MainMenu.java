@@ -16,12 +16,12 @@ public class MainMenu extends MouseAdapter {
     }
 
     public void render(Graphics g) {
-        Font titleFont = new Font("arial", Font.BOLD, 50);
-        Font buttonFont = new Font("arial", Font.PLAIN, 30);
+        Font titleFont = new Font("MinecraftCHMC", Font.ITALIC, 200);
+        Font buttonFont = new Font("MinecraftCHMC", Font.PLAIN, 50);
 
         g.setFont(titleFont);
         g.setColor(Color.WHITE);
-        int titleWidth = g.getFontMetrics(titleFont).stringWidth("Survival Wizard!");
+        int titleWidth = g.getFontMetrics(titleFont).stringWidth("Survival Wizard");
         g.drawString("Survival Wizard!", (game.getWidth() - titleWidth) / 2, 200);
 
         g.setFont(buttonFont);

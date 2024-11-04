@@ -47,7 +47,13 @@ public class Game extends Canvas implements Runnable {
     public BufferedImage[] levels;
 
     public Game() {
-        new Window(1920, 1080, "Survival Wizard!", this);
+    	JFrame frame = new JFrame("Survival Wizard!");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+        frame.add(this);
+        frame.setVisible(true);
+
         handler = new Handler();
         camera = new Camera(0, 0);
         mainMenu = new MainMenu(this, handler);
@@ -204,7 +210,7 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.black);
             g.drawRect(5, 5, 200, 32);
 
-            Font gameFont = new Font("Arial", Font.BOLD, 24);
+            Font gameFont = new Font("MinecraftCHMC", Font.BOLD, 48);
             g.setFont(gameFont);
             g.setColor(Color.white);
             g.drawString("Mana : " + ammo, 5, 100);
@@ -222,19 +228,19 @@ public class Game extends Canvas implements Runnable {
             mainMenu.render(g);
         } else if (gameState == STATE.Win) {
             g.setColor(Color.white);
-            g.setFont(new Font("Arial", Font.BOLD, 100));
+            g.setFont(new Font("MinecraftCHMC", Font.BOLD, 100));
             int textWidth = g.getFontMetrics().stringWidth("You Escaped!");
             int textHeight = g.getFontMetrics().getHeight();
             g.drawString("You Escaped!", (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2);
         } else if (gameState == STATE.GameOver) {
             g.setColor(Color.red);
-            g.setFont(new Font("Arial", Font.BOLD, 100));
+            g.setFont(new Font("MinecraftCHMC", Font.BOLD, 100));
             int textWidth = g.getFontMetrics().stringWidth("You Died");
             int textHeight = g.getFontMetrics().getHeight();
             g.drawString("You Died", (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2);
         } else if (gameState == STATE.Timeout) {
             g.setColor(Color.orange);
-            g.setFont(new Font("Arial", Font.BOLD, 100));
+            g.setFont(new Font("MinecraftCHMC", Font.BOLD, 100));
             int textWidth = g.getFontMetrics().stringWidth("Time Out");
             int textHeight = g.getFontMetrics().getHeight();
             g.drawString("Time Out", (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2);

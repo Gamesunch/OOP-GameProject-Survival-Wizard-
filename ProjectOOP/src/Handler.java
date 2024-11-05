@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,6 +58,17 @@ public class Handler {
     public void setLeft(boolean left) {
         this.left = left;
     }
+    
+    public int getEnemyCount() {
+        int count = 0;
+        for (GameObject obj : object) {
+            if (obj.getId() == ID.Enemy) {
+                count++;
+            }
+        }
+        return count;
+    }
+
 
     public void tick() {
         for (int i = 0; i < object.size(); i++) {
@@ -64,9 +76,16 @@ public class Handler {
             tempObject.tick();
         }
 
-        object.removeAll(toRemove);
-        toRemove.clear();
+        // Use an iterator to safely remove objects
+        Iterator<GameObject> iterator = object.iterator();
+        while (iterator.hasNext()) {
+            GameObject tempObject = iterator.next();
+            if (tempObject.isMarkedForRemoval()) { // Add a method or condition to mark objects for removal
+                iterator.remove();
+            }
+        }
     }
+
     
 
     public void render(Graphics g) {
@@ -79,12 +98,12 @@ public class Handler {
         toRemove.clear();
     }
     
-    public void addObject(GameObject tempObject) {
-        object.add(tempObject);
+    public synchronized void addObject(GameObject object) {
+        this.object.add(object);
     }
-    
 
-    public void removeObject(GameObject tempObject) {
-        toRemove.add(tempObject);
+    public synchronized void removeObject(GameObject object) {
+        this.object.remove(object);
     }
+
 }

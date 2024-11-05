@@ -7,6 +7,15 @@ public abstract class GameObject {
       protected float velX = 0, velY = 0;
       protected ID id;
       protected SpriteSheet ss;
+      private boolean markedForRemoval = false;
+
+      public boolean isMarkedForRemoval() {
+          return markedForRemoval;
+      }
+
+      public void markForRemoval() {
+          this.markedForRemoval = true;
+      }
 
       
       public GameObject(int x,int y, ID id,SpriteSheet ss){

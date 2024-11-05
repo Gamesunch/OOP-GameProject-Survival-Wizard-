@@ -3,6 +3,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class EnemyBig extends GameObject {
@@ -125,23 +127,21 @@ public class EnemyBig extends GameObject {
     }
 
     private void checkCollisions() {
-        for (int i = 0; i < handler.object.size(); i++) {
-            GameObject tempObject = handler.object.get(i);
-
-            if (tempObject.getId() == ID.Wall1) {
-                if (getBoundsBig().intersects(tempObject.getBounds())) {
-                    handleWallCollision();
-                }
+        List<GameObject> objectsToRemove = new ArrayList<>();
+        for (GameObject tempObject : handler.object) {
+            if (tempObject.getId() == ID.Wall1 && getBoundsBig().intersects(tempObject.getBounds())) {
+                handleWallCollision();
             }
-
-            if (tempObject.getId() == ID.Spells) {
-                if (getBoundsBig().intersects(tempObject.getBounds())) {
-                    hp -= 50;
-                    handler.removeObject(tempObject);
-                }
+            if (tempObject.getId() == ID.Spells && getBoundsBig().intersects(tempObject.getBounds())) {
+                hp -= 50;
+                objectsToRemove.add(tempObject); // Collect objects to remove later
             }
         }
+
+        // Remove objects after iteration
+        handler.object.removeAll(objectsToRemove);
     }
+
 
     private void handleWallCollision() {
         if (velX != 0) {

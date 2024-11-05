@@ -47,7 +47,7 @@ public class Game extends Canvas implements Runnable {
     public BufferedImage[] levels;
 
     public Game() {
-    	JFrame frame = new JFrame("Survival Wizard!");
+    	JFrame frame = new JFrame("Survival Wizard!");	
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true);
@@ -143,12 +143,14 @@ public class Game extends Canvas implements Runnable {
 
     public void tick() {
         if (gameState == STATE.Game) {
-            for (int i = 0; i < handler.object.size(); i++) {
-                if (handler.object.get(i).getId() == ID.player) {
-                    camera.tick(handler.object.get(i));
+            synchronized (handler) {
+                for (int i = 0; i < handler.object.size(); i++) {
+                    if (handler.object.get(i).getId() == ID.player) {
+                        camera.tick(handler.object.get(i));
+                    }
                 }
+                if (handler != null) handler.tick();
             }
-            if (handler != null) handler.tick();
 
             // Check if player died
             if (hp <= 0) {
@@ -167,13 +169,17 @@ public class Game extends Canvas implements Runnable {
             }
 
             // Check if all enemies are eliminated
-            boolean allEnemiesEliminated = handler.object.stream().noneMatch(obj -> obj.getId() == ID.Enemy);
+            boolean allEnemiesEliminated;
+            synchronized (handler) {
+                allEnemiesEliminated = handler.object.stream().noneMatch(obj -> obj.getId() == ID.Enemy);
+            }
             if (allEnemiesEliminated) {
                 System.out.println("All enemies eliminated. Loading next level...");
                 loadNextLevel();
             }
         }
     }
+
 
 
     public void render() {
@@ -198,7 +204,9 @@ public class Game extends Canvas implements Runnable {
                     g.drawImage(floor, xx, yy, 32, 32, null);
                 }
             }
-            handler.render(g);
+            synchronized (handler) {
+                handler.render(g);
+            }
 
             g2d.translate(camera.getX(), camera.getY());
 
@@ -206,7 +214,7 @@ public class Game extends Canvas implements Runnable {
             g.setColor(Color.gray);
             g.fillRect(5, 5, 200, 32);
             g.setColor(Color.green);
-            g.fillRect(5, 5, hp * 2, 32);
+            g.fillRect(5, 5, Math.max(0, hp * 2), 32);
             g.setColor(Color.black);
             g.drawRect(5, 5, 200, 32);
 
@@ -216,14 +224,17 @@ public class Game extends Canvas implements Runnable {
             g.drawString("Mana : " + ammo, 5, 100);
 
             // Draw the number of enemies still alive
-            int enemyCount = (int) handler.object.stream().filter(obj -> obj.getId() == ID.Enemy).count();
+            int enemyCount;
+            synchronized (handler) {
+                enemyCount = (int) handler.object.stream().filter(obj -> obj.getId() == ID.Enemy).count();
+            }
             g.drawString("Enemies Alive: " + enemyCount, 5, 140);
 
             // Draw current level
             g.drawString("Current Level: " + (currentLevel + 1), 5, 180);
 
             // Draw time left
-            g.drawString("Time Left: " + timeLeft + " sec", getWidth()/2 - 100, 50);
+            g.drawString("Time Left: " + timeLeft + " sec", getWidth() / 2 - 100, 50);
         } else if (gameState == STATE.Menu) {
             mainMenu.render(g);
         } else if (gameState == STATE.Win) {

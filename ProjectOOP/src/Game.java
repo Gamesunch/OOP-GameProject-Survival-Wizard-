@@ -238,7 +238,7 @@ public class Game extends Canvas implements Runnable {
         } else if (gameState == STATE.Menu) {
             mainMenu.render(g);
         } else if (gameState == STATE.Win) {
-            g.setColor(Color.white);
+            g.setColor(Color.GREEN);
             g.setFont(new Font("MinecraftCHMC", Font.BOLD, 100));
             int textWidth = g.getFontMetrics().stringWidth("You Escaped!");
             int textHeight = g.getFontMetrics().getHeight();

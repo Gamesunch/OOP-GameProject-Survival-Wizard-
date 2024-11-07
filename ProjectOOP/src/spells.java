@@ -43,7 +43,7 @@ public class spells extends GameObject {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.GREEN);
+		g.setColor(Color.cyan);
 		g.fillOval(x, y, 8, 8);
 		
 	}

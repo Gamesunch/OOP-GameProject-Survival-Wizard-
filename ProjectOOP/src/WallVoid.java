@@ -28,7 +28,7 @@ public class WallVoid extends GameObject {
 
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, 32,32);
+		return new Rectangle(x, y, 48,48);
 	}
 
 }
